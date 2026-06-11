@@ -1,0 +1,13 @@
+CREATE TABLE messages (
+  id        INTEGER PRIMARY KEY AUTOINCREMENT,
+  author    TEXT    NOT NULL,
+  content   TEXT    NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE photos (
+  id        INTEGER PRIMARY KEY AUTOINCREMENT,
+  filename  TEXT NOT NULL,
+  caption   TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);

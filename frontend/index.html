@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>İyi ki doğdun Meryem! 🎂</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink:    #ff6eb4;
+      --purple:  #a855f7;
+      --yellow:  #fbbf24;
+      --teal:    #2dd4bf;
+      --coral:   #fb7185;
+      --lavender:#e9d5ff;
+      --cream:   #fff9f0;
+      --dark:    #3b1f5e;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    canvas#confetti-canvas {
+      position: fixed; top:0; left:0;
+      width:100%; height:100%;
+      pointer-events:none; z-index:9999;
+    }
+
+    /* ── DEKORASYON: kenarlardaki çiçek/böcek SVG'leri ── */
+    .deco {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+      font-size: 28px;
+      animation: float 4s ease-in-out infinite alternate;
+      user-select: none;
+    }
+    .deco:nth-child(odd)  { animation-duration: 3.5s; }
+    .deco:nth-child(even) { animation-duration: 5s; }
+    @keyframes float {
+      from { transform: translateY(0) rotate(-5deg); }
+      to   { transform: translateY(-14px) rotate(5deg); }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 5rem 1rem 3rem;
+      background: linear-gradient(160deg, #fce7ff 0%, #e0f2fe 50%, #fef9c3 100%);
+      border-bottom: 3px dashed #f0abfc;
+    }
+    .hero-emoji {
+      font-size: 70px;
+      display: block;
+      animation: bigbounce 1s infinite alternate;
+    }
+    @keyframes bigbounce {
+      from { transform: scale(1)   translateY(0); }
+      to   { transform: scale(1.1) translateY(-20px); }
+    }
+    .hero h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(2.2rem, 7vw, 4rem);
+      background: linear-gradient(90deg, var(--pink), var(--purple), var(--teal));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 1rem 0 0.5rem;
+      line-height: 1.2;
+    }
+    .hero p { color: #7c3aed; font-size: 1.1rem; font-weight: 500; }
+    .badges {
+      display: flex; gap: 8px; justify-content: center;
+      flex-wrap: wrap; margin-top: 1.2rem;
+    }
+    .badge {
+      font-size: 13px; font-weight: 700;
+      padding: 6px 16px; border-radius: 999px;
+      border: 2px solid transparent;
+    }
+    .b1 { background:#fce7ff; color:#7e22ce; border-color:#d8b4fe; }
+    .b2 { background:#fef3c7; color:#92400e; border-color:#fde68a; }
+    .b3 { background:#ccfbf1; color:#065f46; border-color:#99f6e4; }
+    .b4 { background:#ffe4e6; color:#9f1239; border-color:#fda4af; }
+
+    /* ── SECTIONS ── */
+    .section {
+      position: relative; z-index: 1;
+      max-width: 720px; margin: 0 auto;
+      padding: 0 1rem 4rem;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      padding: 1.75rem;
+      margin-bottom: 1.75rem;
+      border: 2px solid #f0e6ff;
+      box-shadow: 0 4px 24px rgba(168,85,247,0.08);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute; top:0; left:0; right:0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--pink), var(--purple), var(--teal), var(--yellow));
+    }
+    .card h2 {
+      font-size: 16px; font-weight: 700;
+      margin-bottom: 1.1rem;
+      display: flex; align-items: center; gap: 10px;
+      color: var(--dark);
+    }
+    .card-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .ci-pink   { background: #fce7ff; }
+    .ci-yellow { background: #fef9c3; }
+    .ci-teal   { background: #ccfbf1; }
+    .ci-coral  { background: #ffe4e6; }
+    .ci-purple { background: #ede9fe; }
+
+    /* ── FUNNY LIST ── */
+    .funny-list { list-style: none; }
+    .funny-list li {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1.5px dashed #f3e8ff;
+      font-size: 14px; color: #4c1d95; line-height: 1.6;
+    }
+    .funny-list li:last-child { border-bottom: none; }
+    .fnum {
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff; font-weight: 700; font-size: 12px;
+      width: 26px; height: 26px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+
+    /* ── ANI ── */
+    .memory-text {
+      font-size: 15px; color: #5b21b6;
+      line-height: 1.8; font-style: italic;
+      background: linear-gradient(135deg, #fdf4ff, #e0f2fe);
+      border-radius: 16px; padding: 1.2rem 1.4rem;
+      border-left: 4px solid var(--pink);
+      min-height: 80px;
+      transition: all 0.4s ease;
+    }
+    .mem-btns { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+    .mem-btn {
+      font-size: 13px; font-weight: 600;
+      padding: 6px 16px; border-radius: 999px;
+      border: 2px solid #d8b4fe;
+      background: #faf5ff; color: #7e22ce;
+      cursor: pointer; transition: all .15s;
+    }
+    .mem-btn:hover { background: #ede9fe; }
+
+    /* ── GALERİ ── */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .photo-slot {
+      aspect-ratio: 1; border-radius: 16px;
+      border: 2.5px dashed #d8b4fe;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      cursor: pointer; gap: 6px;
+      color: #a78bfa; font-size: 12px; font-weight: 600;
+      background: #faf5ff;
+      overflow: hidden; transition: border-color .2s;
+      position: relative;
+    }
+    .photo-slot:hover { border-color: var(--pink); }
+    .photo-slot .plus { font-size: 28px; color: #c084fc; }
+    .photo-slot img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; border-radius: 14px;
+      display: none;
+    }
+    .caption-row {
+      display: flex; gap: 10px; margin-top: 12px;
+    }
+    .caption-row input {
+      flex: 1; padding: 9px 14px;
+      border: 2px solid #e9d5ff; border-radius: 12px;
+      font-size: 13px; font-family: inherit;
+      background: #fdf4ff; color: var(--dark);
+      outline: none;
+    }
+    .caption-row input:focus { border-color: var(--purple); }
+
+    /* ── MESAJLAR ── */
+    .msg-form { display: flex; flex-direction: column; gap: 10px; }
+    .msg-form input, .msg-form textarea {
+      padding: 11px 15px;
+      border: 2px solid #e9d5ff; border-radius: 14px;
+      font-size: 14px; font-family: inherit;
+      background: #fdf4ff; color: var(--dark);
+      outline: none; resize: none;
+    }
+    .msg-form input:focus,
+    .msg-form textarea:focus { border-color: var(--purple); }
+    .msg-form textarea { height: 80px; }
+
+    .btn {
+      padding: 11px 22px; border-radius: 14px;
+      border: 2px solid #d8b4fe;
+      background: #fff; color: #7e22ce;
+      font-size: 14px; font-weight: 700;
+      font-family: inherit;
+      cursor: pointer; transition: all .15s;
+    }
+    .btn:hover { background: #faf5ff; transform: scale(1.02); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: #fff; border-color: transparent;
+    }
+    .btn-primary:hover { opacity: .9; transform: scale(1.03); }
+
+    .messages-list { margin-top: 1.2rem; display: flex; flex-direction: column; gap: 12px; }
+    .msg-item {
+      background: linear-gradient(135deg, #fdf4ff, #eff6ff);
+      border-radius: 16px; padding: 14px 16px;
+      border: 1.5px solid #e9d5ff;
+    }
+    .msg-item .author { font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 5px; }
+    .msg-item .text   { font-size: 14px; color: #4c1d95; line-height: 1.65; }
+    .msg-item .time   { font-size: 11px; color: #a78bfa; margin-top: 6px; }
+
+    /* ── WISH ── */
+    .wish-box {
+      text-align: center; padding: 3.5rem 1.5rem;
+      background: linear-gradient(160deg, #fce7ff, #e0f2fe, #fef9c3);
+      border-radius: 28px;
+      border: 2px dashed #f0abfc;
+      margin-bottom: 2rem;
+    }
+    .wish-box .big { font-size: 52px; display:block; margin-bottom:1rem; animation: spin 3s linear infinite; }
+    @keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+    .wish-box p {
+      font-size: 1.15rem; line-height: 1.9;
+      color: #4c1d95; font-weight: 500;
+      max-width: 440px; margin: 0 auto 1.5rem;
+    }
+    .wish-box small { color: #a78bfa; font-size: 13px; display:block; margin-bottom:1.5rem; }
+
+    /* ── LOADING / ERROR ── */
+    .loading { text-align:center; color:#a78bfa; font-size:13px; padding:1rem; }
+    .error   { color:#be123c; font-size:13px; margin-top:6px; }
+
+    /* ── DIVIDER ── */
+    .divider {
+      text-align:center; font-size:26px;
+      padding: 1rem 0 0.5rem; letter-spacing: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="confetti-canvas"></canvas>
+
+<!-- Dekoratif kenarlık emojileri -->
+<div class="deco" style="top:5%;  left:1%">🌸</div>
+<div class="deco" style="top:15%; left:2%">🦋</div>
+<div class="deco" style="top:28%; left:0.5%">🌼</div>
+<div class="deco" style="top:42%; left:1.5%">🐝</div>
+<div class="deco" style="top:58%; left:0.8%">🌺</div>
+<div class="deco" style="top:72%; left:1.5%">🦄</div>
+<div class="deco" style="top:85%; left:1%">🌻</div>
+<div class="deco" style="top:92%; left:2%">🍭</div>
+
+<div class="deco" style="top:5%;  right:1%">🎀</div>
+<div class="deco" style="top:15%; right:2%">🌷</div>
+<div class="deco" style="top:28%; right:0.5%">🐞</div>
+<div class="deco" style="top:42%; right:1.5%">🌸</div>
+<div class="deco" style="top:58%; right:0.8%">🦋</div>
+<div class="deco" style="top:72%; right:1.5%">🌼</div>
+<div class="deco" style="top:85%; right:1%">🎂</div>
+<div class="deco" style="top:92%; right:2%">✨</div>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-emoji">🎂</span>
+  <h1>Happy Birthday Sister</h1></h1>
+  <p>21. yaşın kutlu olsun 🎉</p>
+</div>
+
+<div class="section">
+
+  <!-- KOMİK LİSTE -->
+  <div class="card" style="margin-top:2rem">
+    <ul class="funny-list">
+      <li><span class="fnum"></span> Çocukken hiç büyümeyeceğimizi sanıp oyunlarla koşturmacayla geçerdi günümüz.</li>
+      <li><span class="fnum"></span> Şimdi yine koşuyoruz ama bu sefer hayatta geriye düşenlerden olmamak için.</li>
+      <li><span class="fnum"></span> Seni her koşulda destekleyeceğimi ve düşsen de kaldıracağımı iyi bil! </li>
+      <li><span class="fnum"></span> Doğum günün kutlu olsun ,İyi ki varsın</li>
+    </ul>
+  </div>
+
+  <!-- ANI KÖŞESİ -->
+  <div class="card">
+    <h2>
+      <span class="card-icon ci-yellow">💛</span>
+      Anı köşesi
+    </h2>
+    <div class="memory-text" id="memory-display">
+      "Küçükken sen benim bebek beğim gibiydin. Şimdi sen büyüdün, ben küçüldüm sanki. Seni her gördüğümde içim ısınıyor."
+    </div>
+    <div class="mem-btns">
+      <button class="mem-btn" onclick="changeMemory(0)">🌸 Anı 1</button>
+      <button class="mem-btn" onclick="changeMemory(1)">🌼 Anı 2</button>
+      <button class="mem-btn" onclick="changeMemory(2)">🌺 Anı 3</button>
+    </div>
+  </div>
+
+  <!-- FOTOĞRAF GALERİSİ -->
+  <div class="card">
+    <h2>
+      <span class="card-icon ci-teal">📸</span>
+      Anı galerisi
+    </h2>
+    <div class="photo-grid" id="photo-grid">
+      <div class="loading">Fotoğraflar yükleniyor...</div>
+    </div>
+    <div class="caption-row">
+      <input type="text" id="caption-input" placeholder="Açıklama (isteğe bağlı)" />
+      <label class="btn" style="cursor:pointer; white-space:nowrap">
+        📷 Ekle
+        <input type="file" id="photo-file" accept="image/*" style="display:none" onchange="uploadPhoto()">
+      </label>
+    </div>
+    <p id="photo-error" class="error"></p>
+  </div>
+
+  <!-- MESAJLAR -->
+  <div class="card">
+    <h2>
+      <span class="card-icon ci-coral">💌</span>
+      Meryem'e mesaj bırak
+    </h2>
+    <div class="msg-form">
+      <input type="text" id="msg-author" placeholder="Adın" maxlength="50" />
+      <textarea id="msg-content" placeholder="Meryem'e ne söylemek istersin?"></textarea>
+      <button class="btn btn-primary" onclick="sendMessage()">Gönder 🎉</button>
+      <p id="msg-error" class="error"></p>
+    </div>
+    <div class="messages-list" id="messages-list">
+      <div class="loading">Mesajlar yükleniyor...</div>
+    </div>
+  </div>
+
+  <div class="divider">🌸 🦋 🌼 🐝 🌺</div>
+
+  <!-- DİLEK -->
+  <div class="wish-box">
+    <span class="big">🎊</span>
+    <p>Meryem, 21 yaşın hayatının en güzel döneminin başlangıcı olsun. Seni çok seviyorum kardeşim. ✨</p>
+    <small>İyi ki doğdun, iyi ki kardeşimsin.</small>
+    <button class="btn btn-primary" onclick="fireConfetti()">Konfeti at! 🎊</button>
+  </div>
+
+</div>
+
+<script>
+  const API = 'http://localhost:3000';
+
+  // ── MEMORIES ─────────────────────────────────────────
+  const memories = [
+    '"Küçükken sen benim bebek beğim gibiydin. Şimdi sen büyüdün, ben küçüldüm sanki. Seni her gördüğümde içim ısınıyor."',
+    '"Birlikte geçirdiğimiz o yaz tatillerini hiç unutmayacağım. Güldük, kavga ettik, barıştık. Hep böyle olsun."',
+    '"Zor günlerimde yanımda olduğun için, hiçbir şey demeden anlayan biri olduğun için — sağ ol kardeşim."'
+  ];
+  function changeMemory(i) {
+    const el = document.getElementById('memory-display');
+    el.style.opacity = '0';
+    setTimeout(() => { el.textContent = memories[i]; el.style.opacity = '1'; }, 300);
+  }
+  document.getElementById('memory-display').style.transition = 'opacity 0.3s';
+
+  // ── MESSAGES ─────────────────────────────────────────
+  async function loadMessages() {
+    try {
+      const res  = await fetch(`${API}/api/messages`);
+      const data = await res.json();
+      const list = document.getElementById('messages-list');
+      if (!data.length) {
+        list.innerHTML = '<p class="loading">Henüz mesaj yok — ilk sen yaz! 💌</p>';
+        return;
+      }
+      list.innerHTML = data.map(m => `
+        <div class="msg-item">
+          <div class="author">💜 ${escHtml(m.author)}</div>
+          <div class="text">${escHtml(m.content)}</div>
+          <div class="time">${new Date(m.created_at).toLocaleString('tr-TR')}</div>
+        </div>`).join('');
+    } catch {
+      document.getElementById('messages-list').innerHTML = '<p class="error">Mesajlar yüklenemedi.</p>';
+    }
+  }
+
+  async function sendMessage() {
+    const author  = document.getElementById('msg-author').value.trim();
+    const content = document.getElementById('msg-content').value.trim();
+    const errEl   = document.getElementById('msg-error');
+    errEl.textContent = '';
+    if (!author || !content) { errEl.textContent = 'Lütfen isim ve mesajı doldur.'; return; }
+    try {
+      const res = await fetch(`${API}/api/messages`, {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ author, content })
+      });
+      if (!res.ok) throw new Error();
+      document.getElementById('msg-author').value  = '';
+      document.getElementById('msg-content').value = '';
+      fireConfetti();
+      loadMessages();
+    } catch { errEl.textContent = 'Mesaj gönderilemedi, tekrar dene.'; }
+  }
+
+  // ── PHOTOS ───────────────────────────────────────────
+  async function loadPhotos() {
+    try {
+      const res  = await fetch(`${API}/api/photos`);
+      const data = await res.json();
+      const grid = document.getElementById('photo-grid');
+      if (!data.length) {
+        grid.innerHTML = '<p class="loading">Henüz fotoğraf yok 📸</p>';
+        return;
+      }
+      grid.innerHTML = data.map(p => `
+        <div class="photo-slot" style="border-style:solid">
+          <img src="${API}${p.url}" alt="${escHtml(p.caption||'')}" style="display:block">
+        </div>`).join('');
+    } catch {
+      document.getElementById('photo-grid').innerHTML = '<p class="error">Fotoğraflar yüklenemedi.</p>';
+    }
+  }
+
+  async function uploadPhoto() {
+    const file    = document.getElementById('photo-file').files[0];
+    const caption = document.getElementById('caption-input').value;
+    const errEl   = document.getElementById('photo-error');
+    if (!file) return;
+    const fd = new FormData();
+    fd.append('photo', file);
+    fd.append('caption', caption);
+    try {
+      const res = await fetch(`${API}/api/photos`, { method:'POST', body:fd });
+      if (!res.ok) throw new Error();
+      document.getElementById('caption-input').value = '';
+      loadPhotos();
+    } catch { errEl.textContent = 'Fotoğraf yüklenemedi.'; }
+  }
+
+  // ── KONFETİ ──────────────────────────────────────────
+  const COLORS = ['#ff6eb4','#a855f7','#fbbf24','#2dd4bf','#fb7185','#60a5fa','#34d399','#f472b6'];
+  function fireConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx = canvas.getContext('2d');
+    const pieces = Array.from({length: 160}, () => ({
+      x:     Math.random() * canvas.width,
+      y:     -20 - Math.random() * 120,
+      w:     6 + Math.random() * 9,
+      h:     10 + Math.random() * 7,
+      color: COLORS[Math.floor(Math.random() * COLORS.length)],
+      vx:    (Math.random() - 0.5) * 5,
+      vy:    2 + Math.random() * 4.5,
+      rot:   Math.random() * Math.PI * 2,
+      rs:    (Math.random() - 0.5) * 0.25,
+      shape: Math.random() > 0.5 ? 'rect' : 'circle'
+    }));
+    let t = 0, frame;
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach(p => {
+        p.x += p.vx; p.y += p.vy; p.rot += p.rs;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        if (p.shape === 'circle') {
+          ctx.beginPath();
+          ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        }
+        ctx.restore();
+      });
+      if (++t < 180) frame = requestAnimationFrame(draw);
+      else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    cancelAnimationFrame(frame);
+    draw();
+  }
+
+  function escHtml(s) {
+    return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // Sayfa açılınca konfeti!
+  window.addEventListener('load', () => {
+    setTimeout(fireConfetti, 600);
+  });
+
+  loadMessages();
+  loadPhotos();
+</script>
+</body>
+</html>

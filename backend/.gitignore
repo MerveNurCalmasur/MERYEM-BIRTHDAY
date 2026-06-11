@@ -1,0 +1,4 @@
+node_modules/
+birthday.db
+uploads/
+.env
